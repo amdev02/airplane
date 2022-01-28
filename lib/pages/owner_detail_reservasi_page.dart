@@ -12,6 +12,7 @@ import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_fee_reservasi.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class OwnerDetailReservasiPage extends StatefulWidget {
   final LeadModel model;
@@ -25,21 +26,18 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
   var isLoading = false;
 
   String nameSales = "";
-  String imagesSales = "";
-
   getSales(String idSales) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
       });
     } else {
       setState(() {
@@ -52,21 +50,19 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -84,40 +80,14 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.getFeeDetail), body: {
-      "id_lead": idLead,
+    final response = await http.post(Uri.parse(BaseUrl.getFee), body: {
+      "id": idLead,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         feeReservasi = data['fee_reservasi'];
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  String noRumah = "";
-  String tipeRumah = "";
-  getRumahDetail(String idLead) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(BaseUrl.getRumahDetail), body: {
-      "id_lead": idLead,
-    });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        noRumah = data['no_rumah'];
-        tipeRumah = data['tipe_rumah'];
       });
     } else {
       setState(() {
@@ -139,8 +109,9 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -177,7 +148,6 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
     getSales(widget.model.id_sales);
     getMarkom(widget.model.id_markom);
     getFeeDetail(widget.model.id_lead);
-    getRumahDetail(widget.model.id_lead);
     getTracking();
   }
 
@@ -203,17 +173,9 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        child: InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom),
       );
     }
 
@@ -293,7 +255,7 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  noRumah,
+                  widget.model.no_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -309,7 +271,7 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  tipeRumah,
+                  widget.model.tipe_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -431,8 +393,7 @@ class _OwnerDetailReservasiPageState extends State<OwnerDetailReservasiPage> {
                 ),
                 child: ListView(
                   children: [
-                    informationSales(),
-                    informationMarkom(),
+                    informationUser(),
                     informationLead(),
                     informationKeterangan(),
                     informationFeeReservasi(),

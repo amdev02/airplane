@@ -29,7 +29,7 @@ class _HmNewLeadPageState extends State<HmNewLeadPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getLeadHm));
+    final response = await http.post(Uri.parse(BaseUrl.getLeadAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

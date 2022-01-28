@@ -11,6 +11,7 @@ import 'package:varana_apps/widget/custom_loading.dart';
 import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class SpvSalesDetailKpr extends StatefulWidget {
   final LeadModel model;
@@ -24,21 +25,19 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
   var isLoading = false;
 
   String nameSales = "";
-  String imagesSales = "";
 
   getSales(String idSales) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
       });
     } else {
       setState(() {
@@ -51,21 +50,19 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -84,8 +81,8 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.getFeeDetail), body: {
-      "id_lead": idLead,
+    final response = await http.post(Uri.parse(BaseUrl.getFee), body: {
+      "id": idLead,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
@@ -94,34 +91,6 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
         feeReservasi = data['fee_reservasi'];
         feeBooking = data['fee_booking'];
         total = data['total'];
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  String noRumah = "";
-  String tipeRumah = "";
-  int harga = 0;
-  getRumahDetail(String idLead) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(BaseUrl.getRumahDetail), body: {
-      "id_lead": idLead,
-    });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        noRumah = data['no_rumah'];
-        tipeRumah = data['tipe_rumah'];
-        harga = data['harga'];
       });
     } else {
       setState(() {
@@ -143,44 +112,18 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
     setState(() {
       isLoading = true;
     });
-    final response =
-        await http.post(Uri.parse(BaseUrl.getPembayaranDetail), body: {
-      "id_lead": idLead,
+    final response = await http.post(Uri.parse(BaseUrl.getPayment), body: {
+      "id": idLead,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         subtotal = data['subtotal'];
-        dp = data['downpayment'];
-        diskon = data['diskon'];
+        dp = data['dp'];
+        diskon = data['diskon_harga'];
         diskonDp = data['diskon_dp'];
         dpDibayar = data['dp_dibayar'];
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  String namaBank = "";
-
-  getBankDetail(String idLead) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(BaseUrl.getBankDetail), body: {
-      "id_lead": idLead,
-    });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        namaBank = data['nama_bank'];
       });
     } else {
       setState(() {
@@ -240,9 +183,7 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
     getSales(widget.model.id_sales);
     getMarkom(widget.model.id_markom);
     getFeeDetail(widget.model.id_lead);
-    getRumahDetail(widget.model.id_lead);
     getPembayaranDetail(widget.model.id_lead);
-    getBankDetail(widget.model.id_lead);
     getTracking();
   }
 
@@ -268,17 +209,13 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        width: double.infinity,
+        child: InformationUsers(
+          nameSales: nameSales,
+          nameMarkom: nameMarkom,
+        ),
       );
     }
 
@@ -428,7 +365,9 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  harga != null ? "Rp. ${price.format(harga)}" : "Rp. 0",
+                  widget.model.harga! != null
+                      ? "Rp. ${price.format(int.parse(widget.model.harga!))}"
+                      : "Rp. 0",
                   style: whiteTextStyle,
                 ),
               ],
@@ -516,19 +455,6 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
             SizedBox(
               height: 12,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Subtotal",
-                  style: whiteTextStyle,
-                ),
-                Text(
-                  namaBank,
-                  style: whiteTextStyle,
-                ),
-              ],
-            ),
           ],
         ),
       );
@@ -564,7 +490,7 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  noRumah,
+                  widget.model.no_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -580,7 +506,7 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  tipeRumah,
+                  widget.model.tipe_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -726,8 +652,7 @@ class _SpvSalesDetailKprState extends State<SpvSalesDetailKpr> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    informationSales(),
-                    informationMarkom(),
+                    informationUser(),
                     informationLead(),
                     informationKeterangan(),
                     informationFee(),

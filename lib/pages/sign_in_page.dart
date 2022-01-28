@@ -52,13 +52,12 @@ class _SignInPageState extends State<SignInPage> {
       print(data);
       int value = data['value'];
       String? message = data['message'];
-      String? idUser = data['id_users'];
+      String? idUser = data['id_user'];
       String? username = data['username'];
       String? name_user = data['nama_user'];
       String? level = data['level'];
       String? active = data['active'];
-      String? createDate = data['createDate'];
-      String? updateDate = data['updateDate'];
+      String? createDate = data['created'];
       String? id_markom = data['id_markom'];
       String? images = data['image'];
       String? token = data['token'];
@@ -68,35 +67,35 @@ class _SignInPageState extends State<SignInPage> {
           setState(() {
             _loginStatus = LoginStatus.signInSales;
             save(value, idUser!, username!, name_user!, level!, active!,
-                createDate!, updateDate!, id_markom!, images!, token!);
+                createDate!, id_markom!, images!, token!);
           });
         } else if (level == "2") {
           print(message);
           setState(() {
             _loginStatus = LoginStatus.signInMarkom;
             save(value, idUser!, username!, name_user!, level!, active!,
-                createDate!, updateDate!, id_markom!, images!, token!);
+                createDate!, id_markom!, images!, token!);
           });
         } else if (level == "3") {
           print(message);
           setState(() {
             _loginStatus = LoginStatus.signInOwner;
             save(value, idUser!, username!, name_user!, level!, active!,
-                createDate!, updateDate!, id_markom!, images!, token!);
+                createDate!, id_markom!, images!, token!);
           });
         } else if (level == "4") {
           print(message);
           setState(() {
             _loginStatus = LoginStatus.signInSpv;
             save(value, idUser!, username!, name_user!, level!, active!,
-                createDate!, updateDate!, id_markom!, images!, token!);
+                createDate!, id_markom!, images!, token!);
           });
         } else if (level == "5") {
           print(message);
           setState(() {
             _loginStatus = LoginStatus.signInHeadMarkom;
             save(value, idUser!, username!, name_user!, level!, active!,
-                createDate!, updateDate!, id_markom!, images!, token!);
+                createDate!, id_markom!, images!, token!);
           });
         }
       } else {
@@ -139,7 +138,6 @@ class _SignInPageState extends State<SignInPage> {
     String level,
     String active,
     String createDate,
-    String updateDate,
     String id_markom,
     String images,
     String token,
@@ -153,7 +151,6 @@ class _SignInPageState extends State<SignInPage> {
       pref.setString("level", level);
       pref.setString("active", active);
       pref.setString("createDate", createDate);
-      pref.setString("updateDate", updateDate);
       pref.setString("idMarkom", id_markom);
       pref.setString("images", images);
       pref.setString("token", token);

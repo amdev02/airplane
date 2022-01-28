@@ -47,7 +47,7 @@ class _MarkomAddPamitPageState extends State<MarkomAddPamitPage> {
   }
 
   TextEditingController keteranganController = TextEditingController();
-  String statusAbsen = "Pamit";
+  String statusAbsen = "2";
   addAbsen() async {
     setState(() {
       isLoading = true;
@@ -57,13 +57,12 @@ class _MarkomAddPamitPageState extends State<MarkomAddPamitPage> {
       SharedPreferences pref = await SharedPreferences.getInstance();
       var stream = http.ByteStream(DelegatingStream.typed(_image!.openRead()));
       var length = await _image!.length();
-      var url = Uri.parse(BaseUrl.addAbsensi);
+      var url = Uri.parse(BaseUrl.addAbsen);
       var request = http.MultipartRequest("POST", url);
       var multipartFile = http.MultipartFile("image", stream, length,
           filename: path.basename(_image!.path));
-      request.fields['id_sales'] = pref.getString("idUser")!;
+      request.fields['id_user'] = pref.getString("idUser")!;
       request.fields['keterangan'] = keteranganController.text;
-      request.fields['id_markom'] = pref.getString("idUser")!;
       request.fields['status'] = statusAbsen;
       request.files.add(multipartFile);
       var response = await request.send();

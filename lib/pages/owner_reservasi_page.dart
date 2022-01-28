@@ -29,7 +29,7 @@ class _OwnerReservasiPageState extends State<OwnerReservasiPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getReservasiOwner));
+    final response = await http.post(Uri.parse(BaseUrl.getReservasiAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

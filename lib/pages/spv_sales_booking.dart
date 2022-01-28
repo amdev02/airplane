@@ -30,8 +30,8 @@ class _SpvSalesBookingState extends State<SpvSalesBooking> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getBookingMarkom), body: {
-      "id_markom": pref.getString("idMarkom"),
+        await http.post(Uri.parse(BaseUrl.getBookingByMarkom), body: {
+      "id": pref.getString("idMarkom"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

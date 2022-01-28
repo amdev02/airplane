@@ -56,6 +56,118 @@ class _MarkomPendingPageState extends State<MarkomPendingPage> {
     }
   }
 
+  deleteLead(String idLead) async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(BaseUrl.deleteLead), body: {
+      "id": idLead,
+    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      int value = data['value'];
+      String message = data['message'];
+      if (value == 1) {
+        print(message);
+        save();
+      } else {
+        print(message);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  save() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  "assets/success.png",
+                  width: 100,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Berhasil!",
+                  style: blueTextStyle.copyWith(
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: kGreenColor,
+                    ),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context, "/markom-page", (route) => false),
+                    child: Text(
+                      "Home",
+                      style: whiteTextStyle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  alertHapus(String idLead, String nameLead) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(
+            "Apakah Anda Yakin Untuk Menghapus Data ${nameLead} ?",
+            style: blackTextStyle,
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: kBlueColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius12),
+                ),
+              ),
+              onPressed: () {
+                deleteLead(idLead);
+              },
+              child: Text(
+                "Ya",
+                style: whiteTextStyle,
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                "Tidak",
+                style: blackTextStyle,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -151,6 +263,34 @@ class _MarkomPendingPageState extends State<MarkomPendingPage> {
                                     style: whiteTextStyle,
                                   ),
                                 ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                width: 120,
+                                margin: EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: kRedColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(radius12),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    alertHapus(a.id_lead, a.nama_lengkap);
+                                  },
+                                  child: Text(
+                                    "Hapus",
+                                    style: whiteTextStyle,
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(

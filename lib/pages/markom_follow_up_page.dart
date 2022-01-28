@@ -30,8 +30,8 @@ class _MarkomFollowUpPageState extends State<MarkomFollowUpPage> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getFollowUpMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+        await http.post(Uri.parse(BaseUrl.getFollowUpByMarkom), body: {
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

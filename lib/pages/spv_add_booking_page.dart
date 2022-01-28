@@ -29,7 +29,7 @@ class _SpvAddBookingPageState extends State<SpvAddBookingPage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tambahBooking), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addBooking), body: {
       "id_lead": widget.model.id_lead,
       "fee_booking": feeController.text,
       "harga": hargaController.text,
@@ -38,6 +38,7 @@ class _SpvAddBookingPageState extends State<SpvAddBookingPage> {
       "diskon_dp": diskonDpController.text,
       "keterangan": keteranganController.text,
       "id_user": pref.getString("idUser"),
+      "id_rumah": widget.model.id_rumah!,
     });
     if (response.statusCode == 200) {
       save();

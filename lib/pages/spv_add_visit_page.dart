@@ -45,16 +45,12 @@ class _SpvAddVisitPageState extends State<SpvAddVisitPage> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.tambahVisit), body: {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final response = await http.post(Uri.parse(BaseUrl.addVisit), body: {
       "id_lead": widget.model.id_lead,
-      "nama_lengkap": widget.model.nama_lengkap,
-      "alamat": widget.model.alamat,
-      "no_wa": widget.model.no_wa,
-      "sumber": widget.model.sumber,
       "keterangan": keteranganController.text,
       "tgl_visit": datePick.toString(),
-      "id_sales": widget.model.id_sales,
-      "id_markom": widget.model.id_markom,
+      "id_user": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -117,7 +113,6 @@ class _SpvAddVisitPageState extends State<SpvAddVisitPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.notifVisit), body: {
       "id_sales": pref.getString("idUser"),
-      "id_markom": widget.model.id_markom,
     });
   }
 

@@ -29,8 +29,9 @@ class _SalesKprPageState extends State<SalesKprPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getSoldKpr), body: {
-      "id_sales": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getSoldBySales), body: {
+      "id": pref.getString("idUser"),
+      "jp": "KPR",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

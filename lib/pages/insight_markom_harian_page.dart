@@ -28,8 +28,8 @@ class _InsightMarkomHarianState extends State<InsightMarkomHarian> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightHarianMarkom), body: {
-      "id_markom": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightDailyByMarkom), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -45,6 +45,7 @@ class _InsightMarkomHarianState extends State<InsightMarkomHarian> {
           }
           isLoading = false;
           isData = true;
+          print(data);
         });
       }
     } else {

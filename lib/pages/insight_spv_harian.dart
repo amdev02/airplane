@@ -28,8 +28,8 @@ class _InsightSpvHarianState extends State<InsightSpvHarian> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightHarianSales), body: {
-      "id_sales": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightDailyBySales), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

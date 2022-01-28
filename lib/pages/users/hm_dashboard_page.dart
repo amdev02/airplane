@@ -31,7 +31,7 @@ class _HmDashboardState extends State<HmDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -53,16 +53,16 @@ class _HmDashboardState extends State<HmDashboard> {
 
   getCount() async {
     setState(() {
-      isLoading = true;
+    isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.count));
+    final response = await http.post(Uri.parse(BaseUrl.countLead));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        jmlHarian = data['jmlHarian'];
-        mingguan = data['mingguan'];
-        bulanan = data['bulanan'];
+        jmlHarian = data['jumlah_harian'];
+        mingguan = data['jumlah_mingguan'];
+        bulanan = data['jumlah_bulanan'];
         isLoading = false;
       });
     } else {
@@ -81,9 +81,10 @@ class _HmDashboardState extends State<HmDashboard> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.sold3));
+    final response = await http.post(Uri.parse(BaseUrl.getSoldLimit3));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
+        ;
         setState(() {
           isLoading = false;
           isData = false;

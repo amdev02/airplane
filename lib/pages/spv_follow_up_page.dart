@@ -31,7 +31,7 @@ class _SpvFollowUpPageState extends State<SpvFollowUpPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
         await http.post(Uri.parse(BaseUrl.getFollowUpSales), body: {
-      "id_sales": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

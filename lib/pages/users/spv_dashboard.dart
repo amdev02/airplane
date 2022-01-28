@@ -5,6 +5,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varana_apps/models/antrian_model.dart';
 import 'package:varana_apps/pages/spv_add_absen_page.dart';
+import 'package:varana_apps/pages/spv_add_list_tamu.dart';
 import 'package:varana_apps/pages/spv_add_pamit_page.dart';
 import 'package:varana_apps/services/api.dart';
 import 'package:varana_apps/theme/thema.dart';
@@ -30,7 +31,7 @@ class _SpvDashboardState extends State<SpvDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -56,14 +57,14 @@ class _SpvDashboardState extends State<SpvDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.countSales), body: {
-      "id_sales": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        jmlHarian = data['jmlHarian'];
-        mingguan = data['mingguan'];
-        bulanan = data['bulanan'];
+        jmlHarian = data['jumlah_harian'];
+        mingguan = data['jumlah_mingguan'];
+        bulanan = data['jumlah_bulanan'];
         isLoading = false;
       });
     } else {
@@ -84,9 +85,7 @@ class _SpvDashboardState extends State<SpvDashboard> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.antrian), body: {
-      "id_markom": pref.getString("idMarkom"),
-    });
+    final response = await http.post(Uri.parse(BaseUrl.getAntrianAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -113,6 +112,15 @@ class _SpvDashboardState extends State<SpvDashboard> {
     });
   }
 
+  setToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final status = await OneSignal.shared.getDeviceState();
+    final response = await http.post(Uri.parse(BaseUrl.changeToken), body: {
+      "id": pref.getString("idUser"),
+      "token": status?.userId,
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -120,6 +128,7 @@ class _SpvDashboardState extends State<SpvDashboard> {
     getName();
     getCount();
     getAntrian();
+    setToken();
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
@@ -244,6 +253,40 @@ class _SpvDashboardState extends State<SpvDashboard> {
               ),
             ),
           ],
+        ),
+      );
+    }
+
+    Widget addListTamu() {
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SpvAddListTamu()));
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+            left: defaultMargin,
+            right: defaultMargin,
+            top: defaultMargin,
+          ),
+          padding: EdgeInsets.all(defaultMargin),
+          decoration: BoxDecoration(
+            color: kGreenColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.add,
+                color: kWhiteColor,
+                size: 18,
+              ),
+              Text(
+                'Tambah Daftar Tamu',
+                style: whiteTextStyle,
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -457,6 +500,7 @@ class _SpvDashboardState extends State<SpvDashboard> {
           header(),
           boxAbsen(),
           boxCountLead(),
+          addListTamu(),
           // titleNewLead(),
           // boxNewLead(),
           // titleNewSold(),

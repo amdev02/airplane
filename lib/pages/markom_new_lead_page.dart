@@ -29,8 +29,8 @@ class _MarkomNewLeadPageState extends State<MarkomNewLeadPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getLeadMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getLeadByMarkom), body: {
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

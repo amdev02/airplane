@@ -45,7 +45,7 @@ class _ChangeImageState extends State<ChangeImage> {
       var request = http.MultipartRequest("POST", url);
       var multipartFile = http.MultipartFile("image", stream, length,
           filename: path.basename(_image!.path));
-      request.fields['id_users'] = pref.getString("idUser")!;
+      request.fields['id'] = pref.getString("idUser")!;
       request.files.add(multipartFile);
       var response = await request.send();
       response.stream.transform(utf8.decoder).listen((value) {

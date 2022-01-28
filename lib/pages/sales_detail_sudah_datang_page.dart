@@ -13,6 +13,7 @@ import 'package:varana_apps/widget/custom_loading.dart';
 import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 import 'sales_add_tracking_visit_page.dart';
 
@@ -36,14 +37,14 @@ class _SalesDetailSudahDatangPageState
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
+        imagesSales = data['images'];
       });
     } else {
       setState(() {
@@ -56,21 +57,19 @@ class _SalesDetailSudahDatangPageState
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -90,8 +89,9 @@ class _SalesDetailSudahDatangPageState
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -152,17 +152,10 @@ class _SalesDetailSudahDatangPageState
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        width: double.infinity,
+        child: InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom),
       );
     }
 
@@ -222,27 +215,6 @@ class _SalesDetailSudahDatangPageState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 140,
-              margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-              decoration: BoxDecoration(
-                color: kBlackColor,
-                borderRadius: BorderRadius.circular(radius20),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SalesAddBookingVisit(widget.model)));
-                },
-                child: Text(
-                  "Booking",
-                  style: whiteTextStyle,
-                ),
-              ),
-            ),
             Container(
               width: 140,
               margin: EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -357,8 +329,7 @@ class _SalesDetailSudahDatangPageState
               ),
               child: ListView(
                 children: [
-                  informationSales(),
-                  informationMarkom(),
+                  informationUser(),
                   informationLead(),
                   informationKeterangan(),
                   titleTracking(),

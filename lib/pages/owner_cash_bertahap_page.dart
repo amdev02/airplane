@@ -29,8 +29,9 @@ class _OwnerCashBertahapPageState extends State<OwnerCashBertahapPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response =
-        await http.post(Uri.parse(BaseUrl.getSoldCashBertahapOwner));
+    final response = await http.post(Uri.parse(BaseUrl.getSoldAll), body: {
+      "jp": "Cash Bertahap",
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

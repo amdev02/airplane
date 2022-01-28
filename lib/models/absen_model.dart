@@ -1,40 +1,37 @@
 class AbsenModel {
+  // ignore: non_constant_identifier_names
   final String? id_absen;
-  final String? id_sales;
-  final String? imagesAbsen;
-  final String? date;
-  final String? date_wi;
-  final String? status;
-  final String? keterangan;
-  final String? id_markom;
-  final String? id_users;
-  final String? nama_user;
-  final String? image;
+  final String imagesAbsen;
+  final String date;
+  final String status;
+  final String keterangan;
+  // ignore: non_constant_identifier_names
+  final String? id_user;
+  // ignore: non_constant_identifier_names
+  final String nama_user;
+  final String image;
 
   AbsenModel(
+      // ignore: non_constant_identifier_names
       {this.id_absen,
-      this.id_sales,
-      this.imagesAbsen,
-      this.date,
-      this.date_wi,
-      this.status,
-      this.keterangan,
-      this.id_markom,
-      this.id_users,
-      this.nama_user,
-      this.image});
+      // ignore: non_constant_identifier_names
+      this.id_user,
+      required this.imagesAbsen,
+      required this.date,
+      required this.status,
+      required this.keterangan,
+      // ignore: non_constant_identifier_names
+      required this.nama_user,
+      required this.image});
 
   factory AbsenModel.fromJson(Map json) {
     return AbsenModel(
       id_absen: json['id_absen'],
-      id_sales: json['id_sales'],
-      imagesAbsen: json['imagesAbsen'],
-      date: json['date'],
-      date_wi: json['date_wi'],
+      imagesAbsen: json['image_absen'],
+      date: json['tgl_absen'],
       status: json['status'],
       keterangan: json['keterangan'],
-      id_markom: json['id_markom'],
-      id_users: json['id_users'],
+      id_user: json['id_user'],
       nama_user: json['nama_user'],
       image: json['image'],
     );

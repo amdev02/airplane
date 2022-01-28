@@ -26,11 +26,12 @@ class _MarkomAddSalesPageState extends State<MarkomAddSalesPage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.addSales), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addUser), body: {
       "username": usernameController.text,
       "password": passwordController.text,
       "nama_user": nameController.text,
       "id_markom": pref.getString("idUser"),
+      "level": '1',
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

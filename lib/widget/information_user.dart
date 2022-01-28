@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:varana_apps/theme/thema.dart';
 
@@ -25,10 +26,14 @@ class InformationUser extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: kBlackColor,
-            backgroundImage: NetworkImage(imageUrl),
-            radius: 15,
+          Container(
+            width: 30,
+            height: 30,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Text('Koneksi Error'),
+            ),
           ),
           SizedBox(
             width: 12,

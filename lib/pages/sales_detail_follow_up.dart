@@ -13,6 +13,7 @@ import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
 import 'package:http/http.dart' as http;
+import 'package:varana_apps/widget/information_users.dart';
 
 class SalesDetailFollowup extends StatefulWidget {
   final LeadModel model;
@@ -27,46 +28,38 @@ class _SalesDetailFollowupState extends State<SalesDetailFollowup> {
   String nameSales = "";
   String imagesSales = "";
 
-  getSales(String idSales) async {
+  getSales() async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": widget.model.id_sales,
     });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        nameSales = data['nama_user'];
-        imagesSales = data['image'];
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    final data = jsonDecode(response.body)[0];
+    setState(() {
+      isLoading = false;
+      nameSales = data['nama_user'];
+      imagesSales = data['images'];
+    });
     setState(() {
       isLoading = false;
     });
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -86,8 +79,9 @@ class _SalesDetailFollowupState extends State<SalesDetailFollowup> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -121,8 +115,9 @@ class _SalesDetailFollowupState extends State<SalesDetailFollowup> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSales(widget.model.id_sales);
+    getSales();
     getMarkom(widget.model.id_markom);
+
     getTracking();
   }
 
@@ -148,17 +143,10 @@ class _SalesDetailFollowupState extends State<SalesDetailFollowup> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        width: double.infinity,
+        child: InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom),
       );
     }
 
@@ -357,8 +345,7 @@ class _SalesDetailFollowupState extends State<SalesDetailFollowup> {
               ),
               child: ListView(
                 children: [
-                  informationSales(),
-                  informationMarkom(),
+                  informationUser(),
                   informationLead(),
                   informationKeterangan(),
                   titleTracking(),

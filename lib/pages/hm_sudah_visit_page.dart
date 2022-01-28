@@ -30,8 +30,8 @@ class _HmSudahVisitPageState extends State<HmSudahVisitPage> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getSudahVisitOwner), body: {
-      "id_markom": pref.getString("idUser"),
+        await http.post(Uri.parse(BaseUrl.getVisitAll), body: {
+      "status": "2",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

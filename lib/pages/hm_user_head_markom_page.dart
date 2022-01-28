@@ -27,7 +27,9 @@ class _HmUserHeadMarkomPageState extends State<HmUserHeadMarkomPage> {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getHeadMarkom));
+    final response = await http.post(Uri.parse(BaseUrl.getUserByLevel), body: {
+      "level": '5',
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -57,8 +59,8 @@ class _HmUserHeadMarkomPageState extends State<HmUserHeadMarkomPage> {
   }
 
   deleteUser(String idUser) async {
-    final response = await http.post(Uri.parse(BaseUrl.deleteUsers), body: {
-      "id_users": idUser,
+    final response = await http.post(Uri.parse(BaseUrl.deleteUser), body: {
+      "id": idUser,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

@@ -40,10 +40,10 @@ class _MarkomEditLeadState extends State<MarkomEditLead> {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.editLead), body: {
-      "id_lead": widget.model.id_lead,
+      "id": widget.model.id_lead,
       "nama_lengkap": nameController.text,
       "alamat": alamatController.text,
-      "no_wa": noWaController.text,
+      "no_whatsapp": noWaController.text,
       "keterangan": keteranganController.text,
       "sumber": sumberSelection,
     });

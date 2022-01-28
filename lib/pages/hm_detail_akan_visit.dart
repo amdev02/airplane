@@ -10,6 +10,7 @@ import 'package:varana_apps/widget/custom_loading.dart';
 import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class HmDetailAkanVisitPage extends StatefulWidget {
   final VisitModel model;
@@ -23,21 +24,19 @@ class _HmDetailAkanVisitPageState extends State<HmDetailAkanVisitPage> {
   var isLoading = false;
 
   String nameSales = "";
-  String imagesSales = "";
 
   getSales(String idSales) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
       });
     } else {
       setState(() {
@@ -50,21 +49,19 @@ class _HmDetailAkanVisitPageState extends State<HmDetailAkanVisitPage> {
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -84,8 +81,9 @@ class _HmDetailAkanVisitPageState extends State<HmDetailAkanVisitPage> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -146,17 +144,10 @@ class _HmDetailAkanVisitPageState extends State<HmDetailAkanVisitPage> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        width: double.infinity,
+        child: InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom),
       );
     }
 
@@ -286,8 +277,7 @@ class _HmDetailAkanVisitPageState extends State<HmDetailAkanVisitPage> {
               ),
               child: ListView(
                 children: [
-                  informationSales(),
-                  informationMarkom(),
+                  informationUser(),
                   informationLead(),
                   informationKeterangan(),
                   titleTracking(),

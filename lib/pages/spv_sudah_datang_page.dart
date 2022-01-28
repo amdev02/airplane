@@ -29,8 +29,9 @@ class _SpvSudahDatangPageState extends State<SpvSudahDatangPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getSudahVisit), body: {
-      "id_sales": pref.getString("idMarkom"),
+    final response = await http.post(Uri.parse(BaseUrl.getVisitBySales), body: {
+      "id": pref.getString("idUser"),
+      "status": "2",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

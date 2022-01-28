@@ -47,7 +47,7 @@ class _SpvReschedulePageState extends State<SpvReschedulePage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.reschedule), body: {
+    final response = await http.post(Uri.parse(BaseUrl.rescheduleVisit), body: {
       "id_visit": widget.model.id_visit,
       "tgl_visit": datePick.toString(),
       "keterangan": keteranganController.text,

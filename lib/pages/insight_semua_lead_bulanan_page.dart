@@ -27,7 +27,7 @@ class _InsightSemuaLeadBulananState extends State<InsightSemuaLeadBulanan> {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getInsightBulanan));
+    final response = await http.get(Uri.parse(BaseUrl.getInsightAllMonthly));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

@@ -34,7 +34,7 @@ class _OwnerAccountPageState extends State<OwnerAccountPage> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
@@ -42,7 +42,7 @@ class _OwnerAccountPageState extends State<OwnerAccountPage> {
         isLoading = false;
         name = data['nama_user'];
         username = data['username'];
-        images = data['image'];
+        images = data['images'];
       });
     } else {
       setState(() {

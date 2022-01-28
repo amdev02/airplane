@@ -29,7 +29,9 @@ class _HmCashKerasState extends State<HmCashKeras> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getSoldCashKerasOwner));
+    final response = await http.post(Uri.parse(BaseUrl.getSoldAll), body: {
+      "jp": "Cash Keras",
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

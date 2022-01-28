@@ -32,7 +32,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -59,13 +59,13 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.count));
+    final response = await http.post(Uri.parse(BaseUrl.countLead));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        jmlHarian = data['jmlHarian'];
-        mingguan = data['mingguan'];
-        bulanan = data['bulanan'];
+        jmlHarian = data['jumlah_harian'];
+        mingguan = data['jumlah_mingguan'];
+        bulanan = data['jumlah_bulanan'];
         isLoading = false;
       });
     } else {
@@ -84,7 +84,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.sold3));
+    final response = await http.post(Uri.parse(BaseUrl.getSoldLimit3));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -112,17 +112,17 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     });
   }
 
-  String? omset;
+  int omset = 0;
 
   getOmset() async {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.omset));
+    final response = await http.post(Uri.parse(BaseUrl.getOmset));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        omset = data['total'];
+        omset = data[0]['omset'];
       });
     } else {
       setState(() {
@@ -206,7 +206,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
             ),
             Center(
               child: Text(
-                "Rp. ${price.format(int.parse(omset!))}",
+                "Rp. ${price.format(omset)}",
                 style: whiteTextStyle.copyWith(
                   fontSize: 28,
                 ),

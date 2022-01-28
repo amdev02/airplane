@@ -45,7 +45,7 @@ class _SalesAddAbsenPageState extends State<SalesAddAbsenPage> {
   }
 
   TextEditingController keteranganController = TextEditingController();
-  String statusAbsen = "Datang";
+  String statusAbsen = "1";
   addAbsen() async {
     setState(() {
       isLoading = true;
@@ -55,13 +55,12 @@ class _SalesAddAbsenPageState extends State<SalesAddAbsenPage> {
       SharedPreferences pref = await SharedPreferences.getInstance();
       var stream = http.ByteStream(DelegatingStream.typed(_image!.openRead()));
       var length = await _image!.length();
-      var url = Uri.parse(BaseUrl.addAbsensi);
+      var url = Uri.parse(BaseUrl.addAbsen);
       var request = http.MultipartRequest("POST", url);
       var multipartFile = http.MultipartFile("image", stream, length,
           filename: path.basename(_image!.path));
-      request.fields['id_sales'] = pref.getString("idUser")!;
+      request.fields['id_user'] = pref.getString("idUser")!;
       request.fields['keterangan'] = keteranganController.text;
-      request.fields['id_markom'] = pref.getString("idMarkom")!;
       request.fields['status'] = statusAbsen;
       request.files.add(multipartFile);
       var response = await request.send();
@@ -133,7 +132,7 @@ class _SalesAddAbsenPageState extends State<SalesAddAbsenPage> {
   getNotif() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.notifAbsen), body: {
-      "id_users": pref.getString("idUser"),
+      "id_sales": pref.getString("idUser"),
     });
   }
 

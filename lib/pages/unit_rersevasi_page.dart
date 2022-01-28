@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varana_apps/models/unit_models.dart';
 import 'package:http/http.dart' as http;
+import 'package:varana_apps/pages/unit_available.dart';
 import 'package:varana_apps/services/api.dart';
 import 'package:varana_apps/theme/thema.dart';
 import 'package:varana_apps/widget/custom_loading.dart';
@@ -19,14 +20,16 @@ class UnitReservasi extends StatefulWidget {
 class _UnitReservasiState extends State<UnitReservasi> {
   var isLoading = false;
   var isData = false;
-  List<UnitModel> list = [];
+  List<AvailableModels> list = [];
 
   Future<void> getReservasi() async {
     setState(() {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getUnitReservsai));
+    final response = await http.post(Uri.parse(BaseUrl.getHomeByStatus), body: {
+      "status": "2",
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -37,7 +40,7 @@ class _UnitReservasiState extends State<UnitReservasi> {
         final data = jsonDecode(response.body);
         setState(() {
           for (Map i in data) {
-            list.add(UnitModel.fromJson(i));
+            list.add(AvailableModels.fromJson(i));
           }
           isLoading = false;
           isData = true;
@@ -53,9 +56,8 @@ class _UnitReservasiState extends State<UnitReservasi> {
   }
 
   handleAvailable(String idRumah) async {
-    final response = await http.post(Uri.parse(BaseUrl.tambahAvailable), body: {
-      "id_rumah": idRumah,
-    });
+    final response = await http.post(Uri.parse(BaseUrl.editHomeStatus),
+        body: {"id": idRumah, "status": '1'});
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -220,38 +222,6 @@ class _UnitReservasiState extends State<UnitReservasi> {
                             ),
                             SizedBox(
                               height: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Atas Nama",
-                                  style: whiteTextStyle,
-                                ),
-                                Text(
-                                  a.nama_lengkap,
-                                  style: whiteTextStyle,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Jenis Pembayaran",
-                                  style: whiteTextStyle,
-                                ),
-                                Text(
-                                  a.jenis_pembayaran,
-                                  style: whiteTextStyle,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
                             ),
                             Container(
                               width: double.infinity,

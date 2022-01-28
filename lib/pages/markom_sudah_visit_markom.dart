@@ -30,8 +30,9 @@ class _MarkomSudahVisitPageState extends State<MarkomSudahVisitPage> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getSudahVisitMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+        await http.post(Uri.parse(BaseUrl.getVisitByMarkom), body: {
+      "id": pref.getString("idUser"),
+      "status": "2",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

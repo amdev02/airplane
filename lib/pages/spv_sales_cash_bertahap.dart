@@ -29,9 +29,9 @@ class _SpvSalesCashBertahapState extends State<SpvSalesCashBertahap> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response =
-        await http.post(Uri.parse(BaseUrl.getSoldCashBertahanMarkom), body: {
-      "id_markom": pref.getString("idMarkom"),
+    final response = await http.post(Uri.parse(BaseUrl.getSoldByMarkom), body: {
+      "id": pref.getString("idMarkom"),
+      "jp": "Cash Bertahap",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

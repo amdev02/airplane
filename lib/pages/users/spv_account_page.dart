@@ -9,6 +9,7 @@ import 'package:varana_apps/pages/master_stock_page.dart';
 import 'package:varana_apps/pages/privacy_police_page.dart';
 import 'package:varana_apps/pages/product_knowladge_page.dart';
 import 'package:varana_apps/pages/spv_lead_sales_page.dart';
+import 'package:varana_apps/pages/spv_list_tamu.dart';
 import 'package:varana_apps/pages/term_conditions_page.dart';
 import 'package:varana_apps/pages/users/spv_sales_sold.dart';
 import 'package:varana_apps/services/api.dart';
@@ -36,7 +37,7 @@ class _SpvAccountPageState extends State<SpvAccountPage> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
@@ -44,7 +45,7 @@ class _SpvAccountPageState extends State<SpvAccountPage> {
         isLoading = false;
         name = data['nama_user'];
         username = data['username'];
-        images = data['image'];
+        images = data['images'];
       });
     } else {
       setState(() {
@@ -142,6 +143,17 @@ class _SpvAccountPageState extends State<SpvAccountPage> {
                     MaterialPageRoute(builder: (context) => MasterStock()));
               },
               title: "Master Stock",
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            PageReminder(
+              icon: Icons.assignment_ind_outlined,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SpvListTamu()));
+              },
+              title: "Daftar Tamu",
             ),
             SizedBox(
               height: 20,

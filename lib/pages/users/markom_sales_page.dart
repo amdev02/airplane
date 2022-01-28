@@ -27,8 +27,9 @@ class _MarkomSalesPageState extends State<MarkomSalesPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getUserSales), body: {
-      "id_markom": pref.getString("idUser"),
+    print(pref.getString("idUser"));
+    final response = await http.post(Uri.parse(BaseUrl.getUserByMarkom), body: {
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -59,8 +60,8 @@ class _MarkomSalesPageState extends State<MarkomSalesPage> {
   }
 
   active(String idUser) async {
-    final response = await http.post(Uri.parse(BaseUrl.active), body: {
-      "id_users": idUser,
+    final response = await http.post(Uri.parse(BaseUrl.activeUser), body: {
+      "id": idUser,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -76,8 +77,8 @@ class _MarkomSalesPageState extends State<MarkomSalesPage> {
   }
 
   activeNow(String idUser) async {
-    final response = await http.post(Uri.parse(BaseUrl.activeNon), body: {
-      "id_users": idUser,
+    final response = await http.post(Uri.parse(BaseUrl.deactiveUser), body: {
+      "id": idUser,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -93,8 +94,8 @@ class _MarkomSalesPageState extends State<MarkomSalesPage> {
   }
 
   deleteUser(String idUser) async {
-    final response = await http.post(Uri.parse(BaseUrl.deleteUsers), body: {
-      "id_users": idUser,
+    final response = await http.post(Uri.parse(BaseUrl.deleteUser), body: {
+      "id": idUser,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

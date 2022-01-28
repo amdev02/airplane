@@ -26,7 +26,9 @@ class _SpvAddReservasiPageState extends State<SpvAddReservasiPage> {
   List listPembayaran = ['KPR', 'Cash Keras', 'Cash Bertahap'];
 
   selectedRumah() async {
-    final response = await http.get(Uri.parse(BaseUrl.selectedRumah));
+    final response = await http.post(Uri.parse(BaseUrl.getHomeByStatus), body: {
+      "status": '1',
+    });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print(data);

@@ -27,7 +27,7 @@ class _InsightSemuaLeadMingguanState extends State<InsightSemuaLeadMingguan> {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getInsightMingguan));
+    final response = await http.get(Uri.parse(BaseUrl.getInsightAllWeekly));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

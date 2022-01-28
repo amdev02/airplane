@@ -29,8 +29,8 @@ class _SpvSalesNewLeadState extends State<SpvSalesNewLead> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getLeadMarkom), body: {
-      "id_markom": pref.getString("idMarkom"),
+    final response = await http.post(Uri.parse(BaseUrl.getLeadByMarkom), body: {
+      "id": pref.getString("idMarkom"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

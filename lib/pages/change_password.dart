@@ -24,7 +24,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.changePassword), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
       "password": passwordController.text,
     });
     if (response.statusCode == 200) {

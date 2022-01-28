@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:varana_apps/pages/change_profile.dart';
 import 'package:varana_apps/pages/markom_absen_page.dart';
+import 'package:varana_apps/pages/markom_list_tamu.dart';
 import 'package:varana_apps/pages/markom_report_lead.dart';
 import 'package:varana_apps/pages/master_stock_page.dart';
 import 'package:varana_apps/pages/privacy_police_page.dart';
@@ -37,7 +40,7 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
@@ -46,7 +49,7 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
 
         name = data['nama_user'];
         username = data['username'];
-        images = data['image'];
+        images = data['images'];
         idUser = pref.getString("idUser");
       });
     } else {
@@ -78,8 +81,7 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
   }
 
   _launchURL() async {
-    const url =
-        'https://marketingbranding.id/mobileApi/varana/web/report_lead.php';
+    const url = 'https://marketingbranding.id/api/varana/varana-web/lead';
     if (await canLaunch(url)) {
       await launch(
         url,
@@ -90,11 +92,20 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
     }
   }
 
+  String? playerId;
+
+  getPlayerId() async {
+    final status = await OneSignal.shared.getDeviceState();
+    playerId = status?.userId;
+    print("User Id  = ${status?.userId}");
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getName();
+    getPlayerId();
   }
 
   @override
@@ -144,9 +155,27 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
             decoration: BoxDecoration(
               color: kBlueColor,
             ),
-            child: Text(
-              "Id User Anda adalah $idUser",
-              style: whiteTextStyle,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Id Anda adalah",
+                  style: whiteTextStyle,
+                ),
+                GestureDetector(
+                  child: Text("$idUser", style: whiteTextStyle),
+                  onLongPress: () {
+                    Clipboard.setData(
+                      new ClipboardData(text: "$idUser"),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Copy To Clipboard"),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           Container(
@@ -173,6 +202,19 @@ class _MarkomAccountPageState extends State<MarkomAccountPage> {
                         MaterialPageRoute(builder: (context) => MasterStock()));
                   },
                   title: "Master Stock",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                PageReminder(
+                  icon: Icons.assignment_ind_outlined,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MarkomListTamu()));
+                  },
+                  title: "List Tamu",
                 ),
                 SizedBox(
                   height: 20,

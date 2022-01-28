@@ -30,8 +30,8 @@ class _SpvSalesReservasiState extends State<SpvSalesReservasi> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getReservasiMarkom), body: {
-      "id_markom": pref.getString("idMarkom"),
+        await http.post(Uri.parse(BaseUrl.getReservasiByMarkom), body: {
+      "id": pref.getString("idMarkom"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

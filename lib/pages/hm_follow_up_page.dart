@@ -27,7 +27,7 @@ class _HmFollowUpPageState extends State<HmFollowUpPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tampilFollowUpHm));
+    final response = await http.post(Uri.parse(BaseUrl.getFollowUpAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

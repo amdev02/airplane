@@ -28,8 +28,8 @@ class _InsightSalesMingguanState extends State<InsightSalesMingguan> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightMingguanSales), body: {
-      "id_sales": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightWeeklyBySales), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

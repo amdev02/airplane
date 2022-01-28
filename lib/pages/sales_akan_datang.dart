@@ -29,8 +29,9 @@ class _SalesAkanDatangPageState extends State<SalesAkanDatangPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getAkanVisit), body: {
-      "id_sales": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getVisitBySales), body: {
+      "id": pref.getString("idUser"),
+      "status": '1',
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

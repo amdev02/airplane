@@ -24,7 +24,7 @@ class _ChangeUsernameState extends State<ChangeUsername> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.changeUsername), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
       "username": usernameController.text,
     });
     if (response.statusCode == 200) {

@@ -28,7 +28,7 @@ class _SpvAddSoldPageState extends State<SpvAddSoldPage> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.selectedBank));
+    final response = await http.post(Uri.parse(BaseUrl.getBank));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -45,7 +45,7 @@ class _SpvAddSoldPageState extends State<SpvAddSoldPage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tambahSold), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addSold), body: {
       "id_lead": widget.model.id_lead,
       "id_bank": bankSelection,
       "keterangan": keteranganController.text,

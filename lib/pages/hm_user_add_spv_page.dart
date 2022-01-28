@@ -16,20 +16,38 @@ class HmUserAddSpvPage extends StatefulWidget {
 
 class _HmUserAddSpvPageState extends State<HmUserAddSpvPage> {
   var isLoading = false;
+  var markomSelection;
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+
+  var listMarkom = [];
+
+  selectedMarkom() async {
+    final response = await http.post(Uri.parse(BaseUrl.getUserByLevel), body: {
+      'level': '2',
+    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print(data);
+      setState(() {
+        listMarkom = data;
+      });
+    }
+  }
 
   addUser() async {
     setState(() {
       isLoading = true;
     });
 
-    final response = await http.post(Uri.parse(BaseUrl.addSpv), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addUser), body: {
       "username": usernameController.text,
       "password": passwordController.text,
       "nama_user": nameController.text,
+      "level": "4",
+      "id_markom": markomSelection,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -51,6 +69,13 @@ class _HmUserAddSpvPageState extends State<HmUserAddSpvPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedMarkom();
   }
 
   @override
@@ -132,6 +157,46 @@ class _HmUserAddSpvPageState extends State<HmUserAddSpvPage> {
       );
     }
 
+    Widget markomDropdown() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          color: kLightGreenColor,
+          borderRadius: BorderRadius.circular(radius20),
+        ),
+        child: DropdownButtonFormField(
+          hint: Text(
+            "Pilih markom",
+          ),
+          onSaved: (e) => markomSelection,
+          value: markomSelection,
+          style: blackTextStyle,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+          ),
+          items: listMarkom.map((value) {
+            return DropdownMenuItem(
+              child: Text(
+                "${value['nama_user']}",
+                style: blackTextStyle,
+              ),
+              value: value['id_user'],
+            );
+          }).toList(),
+          onChanged: (newvalue) {
+            setState(() {
+              markomSelection = newvalue;
+            });
+          },
+        ),
+      );
+    }
+
     Widget bottomNavbar() {
       return Container(
         height: 80,
@@ -177,6 +242,7 @@ class _HmUserAddSpvPageState extends State<HmUserAddSpvPage> {
           usernameTextField(),
           passwordTextField(),
           nameTextField(),
+          markomDropdown(),
         ],
       ),
       bottomNavigationBar: bottomNavbar(),

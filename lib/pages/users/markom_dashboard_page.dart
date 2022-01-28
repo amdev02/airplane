@@ -5,6 +5,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varana_apps/models/antrian_model.dart';
 import 'package:varana_apps/pages/markom_add_absensi.dart';
+import 'package:varana_apps/pages/markom_add_lead_sales.dart';
 import 'package:varana_apps/pages/markom_add_pamit_page.dart';
 import 'package:varana_apps/services/api.dart';
 import 'package:varana_apps/theme/thema.dart';
@@ -33,14 +34,14 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
+      final data = jsonDecode(response.body);
+      print(data);
       setState(() {
         isLoading = false;
-
-        name = data['nama_user'];
+        name = data[0]['nama_user'];
       });
     } else {
       setState(() {
@@ -57,9 +58,7 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.antrian), body: {
-      "id_markom": pref.getString("idUser"),
-    });
+    final response = await http.post(Uri.parse(BaseUrl.getAntrianAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -71,6 +70,7 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
         setState(() {
           isLoading = false;
           isData = true;
+          print(data);
           for (Map i in data) {
             listAntrian.add(AntrianModel.fromJson(i));
           }
@@ -96,14 +96,15 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.countMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        jmlHarian = data['jmlHarian'];
-        mingguan = data['mingguan'];
-        bulanan = data['bulanan'];
+        jmlHarian = data['jumlah_harian'];
+        mingguan = data['jumlah_mingguan'];
+        bulanan = data['jumlah_bulanan'];
+
         isLoading = false;
       });
     } else {
@@ -116,6 +117,15 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
     });
   }
 
+  setToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final status = await OneSignal.shared.getDeviceState();
+    final response = await http.post(Uri.parse(BaseUrl.changeToken), body: {
+      "id": pref.getString("idUser"),
+      "token": status?.userId,
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -123,6 +133,7 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
     getAntrian();
     getName();
     getCount();
+    setToken();
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
@@ -271,6 +282,40 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
       );
     }
 
+    Widget dataLeadSales() {
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddLeadSales()));
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+            left: defaultMargin,
+            right: defaultMargin,
+            top: defaultMargin,
+          ),
+          padding: EdgeInsets.all(defaultMargin),
+          decoration: BoxDecoration(
+            color: kGreenColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.add,
+                color: kWhiteColor,
+                size: 18,
+              ),
+              Text(
+                'Tambah Lead Sales',
+                style: whiteTextStyle,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget titleAntrian() {
       return Container(
         margin: EdgeInsets.only(
@@ -332,6 +377,7 @@ class _MarkomDashboardState extends State<MarkomDashboard> {
                 header(),
                 boxAbsen(),
                 boxCountLead(),
+                dataLeadSales(),
                 titleAntrian(),
                 antrianSales(),
               ],

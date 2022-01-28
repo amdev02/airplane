@@ -28,7 +28,7 @@ class _SalesPendingPageState extends State<SalesPendingPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.addLeadTimeOut), body: {
+    final response = await http.post(Uri.parse(BaseUrl.getPendingSales), body: {
       "id_sales": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
@@ -56,7 +56,7 @@ class _SalesPendingPageState extends State<SalesPendingPage> {
   }
 
   getAmbilLead(String idLead) async {
-    final response = await http.post(Uri.parse(BaseUrl.ambilLead), body: {
+    final response = await http.post(Uri.parse(BaseUrl.getAmbilLead), body: {
       "id_lead": idLead,
     });
     getPending();

@@ -1,17 +1,25 @@
 class TrackingModel {
+  // ignore: non_constant_identifier_names
   final String id_tracking;
+  // ignore: non_constant_identifier_names
   final String id_user;
+  // ignore: non_constant_identifier_names
   final String id_lead;
   final String keterangan;
   final String tgl;
+  // ignore: non_constant_identifier_names
   final String nama_user;
 
   TrackingModel({
+    // ignore: non_constant_identifier_names
     required this.id_tracking,
+    // ignore: non_constant_identifier_names
     required this.id_user,
+    // ignore: non_constant_identifier_names
     required this.id_lead,
     required this.keterangan,
     required this.tgl,
+    // ignore: non_constant_identifier_names
     required this.nama_user,
   });
 

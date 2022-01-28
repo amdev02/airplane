@@ -14,6 +14,7 @@ import 'package:varana_apps/widget/custom_loading.dart';
 import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class SalesDetailAkanDatang extends StatefulWidget {
   final VisitModel model;
@@ -26,21 +27,19 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
   var isLoading = false;
 
   String nameSales = "";
-  String imagesSales = "";
 
   getSales(String idSales) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
       });
     } else {
       setState(() {
@@ -53,21 +52,19 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -85,7 +82,7 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.tambahSudahDatang), body: {
+        await http.post(Uri.parse(BaseUrl.addVisitConfirmed), body: {
       "id_visit": widget.model.id_visit,
       "id_user": pref.getString("idUser"),
       "id_lead": widget.model.id_lead,
@@ -162,7 +159,6 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
     final response =
         await http.post(Uri.parse(BaseUrl.notifSudahDatang), body: {
       "id_sales": pref.getString("idUser"),
-      "id_markom": widget.model.id_markom,
     });
   }
 
@@ -206,8 +202,9 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -268,17 +265,10 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
+    Widget informationUser() {
+      return Container(
+        width: double.infinity,
+        child: InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom),
       );
     }
 
@@ -469,8 +459,7 @@ class _SalesDetailAkanDatangState extends State<SalesDetailAkanDatang> {
               ),
               child: ListView(
                 children: [
-                  informationSales(),
-                  informationMarkom(),
+                  informationUser(),
                   informationLead(),
                   informationKeterangan(),
                   titleTracking(),

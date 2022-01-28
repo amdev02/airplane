@@ -30,15 +30,15 @@ class _MasterStockState extends State<MasterStock> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.get(Uri.parse(BaseUrl.countRumah));
+    final response = await http.get(Uri.parse(BaseUrl.countHome));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print(data);
       setState(() {
-        sold = data['sold'];
-        booking = data['booking'];
-        reservasi = data['reservasi'];
-        available = data['available'];
+        sold = data['jml_sold'];
+        booking = data['jml_booking'];
+        reservasi = data['jml_reservasi'];
+        available = data['jml_available'];
         isLoading = false;
       });
     } else {
@@ -57,12 +57,12 @@ class _MasterStockState extends State<MasterStock> {
     setState(() {
       isLoading = false;
     });
-    final response = await http.get(Uri.parse(BaseUrl.countProject));
+    final response = await http.get(Uri.parse(BaseUrl.getProject));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
-        jumlahUnit = data['unit'];
+        jumlahUnit = data['jumlah_unit'];
         sisaUnit = data['sisa_unit'];
       });
     } else {

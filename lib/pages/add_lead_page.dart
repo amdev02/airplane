@@ -20,14 +20,11 @@ class _AddLeadPageState extends State<AddLeadPage> {
 
   getSales() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getSales), body: {
-      "id_markom": pref.getString("idUser"),
-    });
+    final response = await http.post(Uri.parse(BaseUrl.getAntrianAll));
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      print(data);
+      final data = jsonDecode(response.body);
       setState(() {
-        idSales = data['id_users'];
+        idSales = data[0]['id_user'];
       });
       print(idSales);
     }
@@ -35,7 +32,7 @@ class _AddLeadPageState extends State<AddLeadPage> {
 
   Future<void> getNotif() async {
     final response = await http.post(Uri.parse(BaseUrl.notifLead), body: {
-      "id_sales": idSales,
+      "id": idSales,
     });
   }
 
@@ -47,7 +44,7 @@ class _AddLeadPageState extends State<AddLeadPage> {
 
   addNewLead() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.addNewLead), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addLead), body: {
       "nama_lengkap": namaController.text,
       "no_whatsapp": noTelpController.text,
       "alamat": alamatController.text,

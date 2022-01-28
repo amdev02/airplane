@@ -30,8 +30,8 @@ class _MarkomBookingPageState extends State<MarkomBookingPage> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getBookingMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+        await http.post(Uri.parse(BaseUrl.getBookingByMarkom), body: {
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

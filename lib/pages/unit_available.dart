@@ -36,7 +36,9 @@ class _UnitAvailableState extends State<UnitAvailable> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getUnitAvailable));
+    final response = await http.post(Uri.parse(BaseUrl.getHomeByStatus), body: {
+      "status": "1",
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

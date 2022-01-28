@@ -29,8 +29,9 @@ class _SalesCashKerasPageState extends State<SalesCashKerasPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getCashKeras), body: {
-      "id_sales": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getSoldBySales), body: {
+      "id": pref.getString("idUser"),
+      "jp": "Cash Keras",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

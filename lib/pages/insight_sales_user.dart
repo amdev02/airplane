@@ -27,7 +27,7 @@ class _InsightSalesUserState extends State<InsightSalesUser> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.getUserInsight), body: {
+    final response = await http.post(Uri.parse(BaseUrl.getUserByLevel), body: {
       "level": level,
     });
     if (response.statusCode == 200) {

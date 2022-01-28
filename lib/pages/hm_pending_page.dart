@@ -28,7 +28,7 @@ class _HmPendingPageState extends State<HmPendingPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getPendingHm));
+    final response = await http.post(Uri.parse(BaseUrl.getPendingAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

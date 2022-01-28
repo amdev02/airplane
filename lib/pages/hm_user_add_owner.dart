@@ -26,10 +26,12 @@ class _HmUserAddOwnerState extends State<HmUserAddOwner> {
       isLoading = true;
     });
 
-    final response = await http.post(Uri.parse(BaseUrl.addOwner), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addUser), body: {
       "username": usernameController.text,
       "password": passwordController.text,
       "nama_user": nameController.text,
+      "level": "3",
+      "id_markom": "0",
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

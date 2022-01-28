@@ -28,8 +28,8 @@ class _InsightSalesBulananState extends State<InsightSalesBulanan> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightBulananSales), body: {
-      "id_sales": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightMonthlyBySales), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

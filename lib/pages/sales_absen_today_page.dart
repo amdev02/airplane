@@ -28,7 +28,7 @@ class _SalesAbsenTodayState extends State<SalesAbsenToday> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tampilAbsensi));
+    final response = await http.post(Uri.parse(BaseUrl.getAbsenToday));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -75,7 +75,7 @@ class _SalesAbsenTodayState extends State<SalesAbsenToday> {
                     final a = list[i];
                     return CardAbsen(
                       name: a.nama_user,
-                      status: a.status,
+                      status: a.status == '1' ? "Absen Pagi" : "Pamit",
                       date: a.date,
                       keterangan: a.keterangan,
                       imagesAbsen: a.imagesAbsen,

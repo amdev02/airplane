@@ -30,8 +30,9 @@ class _SpvSalesAkanDatangState extends State<SpvSalesAkanDatang> {
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response =
-        await http.post(Uri.parse(BaseUrl.getAkanVisitMarkom), body: {
-      "id_markom": pref.getString("idMarkom"),
+        await http.post(Uri.parse(BaseUrl.getVisitByMarkom), body: {
+      "id": pref.getString("idMarkom"),
+      "status": "1",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

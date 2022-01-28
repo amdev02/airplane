@@ -18,14 +18,16 @@ class UnitSold extends StatefulWidget {
 class _UnitSoldState extends State<UnitSold> {
   var isLoading = false;
   var isData = false;
-  List<UnitModel> list = [];
+  List<AvailableModels> list = [];
 
   Future<void> getSold() async {
     setState(() {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getUnitSold));
+    final response = await http.post(Uri.parse(BaseUrl.getHomeByStatus), body: {
+      "status": "4",
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -36,7 +38,7 @@ class _UnitSoldState extends State<UnitSold> {
         final data = jsonDecode(response.body);
         setState(() {
           for (Map i in data) {
-            list.add(UnitModel.fromJson(i));
+            list.add(AvailableModels.fromJson(i));
           }
           isData = true;
           isLoading = false;
@@ -136,35 +138,6 @@ class _UnitSoldState extends State<UnitSold> {
                             ),
                             SizedBox(
                               height: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Atas Nama",
-                                  style: whiteTextStyle,
-                                ),
-                                Text(
-                                  a.nama_lengkap,
-                                  style: whiteTextStyle,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Jenis Pembayaran",
-                                  style: whiteTextStyle,
-                                ),
-                                Text(
-                                  a.jenis_pembayaran,
-                                  style: whiteTextStyle,
-                                ),
-                              ],
                             ),
                           ],
                         ),

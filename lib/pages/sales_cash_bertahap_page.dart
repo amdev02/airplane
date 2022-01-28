@@ -29,8 +29,9 @@ class _SalesCashBertahapPageState extends State<SalesCashBertahapPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getCashBertahap), body: {
-      "id_sales": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getSoldBySales), body: {
+      "id": pref.getString("idUser"),
+      "jp": "Cash Bertahap",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

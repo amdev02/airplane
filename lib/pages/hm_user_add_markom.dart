@@ -25,10 +25,12 @@ class _HmUserAddMarkomState extends State<HmUserAddMarkom> {
       isLoading = true;
     });
 
-    final response = await http.post(Uri.parse(BaseUrl.addMarkom), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addUser), body: {
       "username": usernameController.text,
       "password": passwordController.text,
       "nama_user": nameController.text,
+      'level': '2',
+      "id_markom": "0",
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

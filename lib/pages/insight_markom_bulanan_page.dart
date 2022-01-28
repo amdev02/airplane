@@ -29,8 +29,8 @@ class _InsightMarkomBulananState extends State<InsightMarkomBulanan> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightBulananMarkom), body: {
-      "id_markom": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightMonthlyByMarkom), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

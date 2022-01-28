@@ -29,7 +29,9 @@ class _OwnerAkanVisitPageState extends State<OwnerAkanVisitPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getAkanVisitOwner));
+    final response = await http.post(Uri.parse(BaseUrl.getVisitAll), body:{
+      "status": '1',
+    });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

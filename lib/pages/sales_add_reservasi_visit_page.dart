@@ -26,7 +26,9 @@ class _SalesTambahReservasiVisitState extends State<SalesTambahReservasiVisit> {
   List listPembayaran = ['KPR', 'Cash Keras', 'Cash Bertahap'];
 
   selectedRumah() async {
-    final response = await http.get(Uri.parse(BaseUrl.selectedRumah));
+    final response = await http.post(Uri.parse(BaseUrl.getHomeByStatus), body: {
+      'status': '1',
+    });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print(data);
@@ -44,7 +46,7 @@ class _SalesTambahReservasiVisitState extends State<SalesTambahReservasiVisit> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tambahReservasi), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addReservasi), body: {
       "id_lead": widget.model.id_lead,
       "id_rumah": rumahSelection,
       "fee_reservasi": feeController.text,

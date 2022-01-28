@@ -29,7 +29,7 @@ class _OwnerBookingPageState extends State<OwnerBookingPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getBookingOwner));
+    final response = await http.post(Uri.parse(BaseUrl.getBookingAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

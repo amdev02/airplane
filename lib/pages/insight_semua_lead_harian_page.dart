@@ -26,7 +26,7 @@ class _InsightSemuaLeadHarianState extends State<InsightSemuaLeadHarian> {
       isLoading = true;
     });
     list.clear();
-    final response = await http.get(Uri.parse(BaseUrl.getInsightHarian));
+    final response = await http.get(Uri.parse(BaseUrl.getInsightAllDaily));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {

@@ -29,8 +29,9 @@ class _MarkomSoldKprPageState extends State<MarkomSoldKprPage> {
     });
     list.clear();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.getKprMarkom), body: {
-      "id_markom": pref.getString("idUser"),
+    final response = await http.post(Uri.parse(BaseUrl.getSoldByMarkom), body: {
+      "id": pref.getString("idUser"),
+      "jp": "KPR",
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {

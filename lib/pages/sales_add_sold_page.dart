@@ -27,7 +27,7 @@ class _SalesAddSoldPageState extends State<SalesAddSoldPage> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.selectedBank));
+    final response = await http.post(Uri.parse(BaseUrl.getBank));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -44,11 +44,12 @@ class _SalesAddSoldPageState extends State<SalesAddSoldPage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tambahSold), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addSold), body: {
       "id_lead": widget.model.id_lead,
       "id_bank": bankSelection,
       "keterangan": keteranganController.text,
       "id_user": pref.getString("idUser"),
+      "id_rumah": widget.model.id_rumah!,
     });
     if (response.statusCode == 200) {
       save();

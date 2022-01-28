@@ -12,6 +12,7 @@ import 'package:varana_apps/widget/custom_loading.dart';
 import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class MarkomDetailNewLeadPage extends StatefulWidget {
   final LeadModel model;
@@ -27,20 +28,21 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
   String nameSales = "";
   String imagesSales = "";
 
-  getSales(String idSales) async {
+  getSales() async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": widget.model.id_sales,
     });
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
+      final data = jsonDecode(response.body);
       setState(() {
         isLoading = false;
-        nameSales = data['nama_user'];
-        imagesSales = data['image'];
+        nameSales = data[0]['nama_user'];
+        imagesSales = data[0]['images'];
       });
+      print("id Sales : $data");
     } else {
       setState(() {
         isLoading = false;
@@ -54,20 +56,24 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
   String nameMarkom = "";
   String imagesMarkom = "";
 
-  getMarkom(String idMarkom) async {
+  getMarkom() async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": widget.model.id_markom,
     });
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
-      });
+      if (response.contentLength == 2) {
+        isLoading = true;
+      } else {
+        final data = jsonDecode(response.body)[0];
+        setState(() {
+          isLoading = false;
+          nameMarkom = data['nama_user'];
+          imagesMarkom = data['images'];
+        });
+      }
     } else {
       setState(() {
         isLoading = false;
@@ -86,8 +92,9 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -122,7 +129,7 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.deleteLead), body: {
-      "id_lead": widget.model.id_lead,
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -233,8 +240,8 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSales(widget.model.id_sales);
-    getMarkom(widget.model.id_markom);
+    getSales();
+    getMarkom();
     getTracking();
   }
 
@@ -474,6 +481,10 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
       );
     }
 
+    Widget informationUser() {
+      return InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom);
+    }
+
     return Scaffold(
       backgroundColor: kGreenColor,
       appBar: header(),
@@ -489,8 +500,9 @@ class _MarkomDetailNewLeadPageState extends State<MarkomDetailNewLeadPage> {
               ),
               child: ListView(
                 children: [
-                  informationSales(),
-                  informationMarkom(),
+                  // informationSales(),
+                  // informationMarkom(),
+                  informationUser(),
                   informationLead(),
                   informationKeterangan(),
                   titleTracking(),

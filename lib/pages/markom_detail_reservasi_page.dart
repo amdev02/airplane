@@ -12,6 +12,7 @@ import 'package:varana_apps/widget/data_not_found.dart';
 import 'package:varana_apps/widget/information_fee_reservasi.dart';
 import 'package:varana_apps/widget/information_lead.dart';
 import 'package:varana_apps/widget/information_user.dart';
+import 'package:varana_apps/widget/information_users.dart';
 
 class MarkomDetailReservasiPage extends StatefulWidget {
   final LeadModel model;
@@ -25,21 +26,19 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
   var isLoading = false;
 
   String nameSales = "";
-  String imagesSales = "";
 
   getSales(String idSales) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idSales,
+      "id": idSales,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameSales = data['nama_user'];
-        imagesSales = data['image'];
       });
     } else {
       setState(() {
@@ -52,21 +51,19 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
   }
 
   String nameMarkom = "";
-  String imagesMarkom = "";
 
   getMarkom(String idMarkom) async {
     setState(() {
       isLoading = true;
     });
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": idMarkom,
+      "id": idMarkom,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         nameMarkom = data['nama_user'];
-        imagesMarkom = data['image'];
       });
     } else {
       setState(() {
@@ -84,40 +81,14 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(BaseUrl.getFeeDetail), body: {
-      "id_lead": idLead,
+    final response = await http.post(Uri.parse(BaseUrl.getFee), body: {
+      "id": idLead,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)[0];
       setState(() {
         isLoading = false;
         feeReservasi = data['fee_reservasi'];
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  String noRumah = "";
-  String tipeRumah = "";
-  getRumahDetail(String idLead) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(BaseUrl.getRumahDetail), body: {
-      "id_lead": idLead,
-    });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)[0];
-      setState(() {
-        isLoading = false;
-        noRumah = data['no_rumah'];
-        tipeRumah = data['tipe_rumah'];
       });
     } else {
       setState(() {
@@ -139,8 +110,9 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
       isLoading = false;
     });
     list.clear();
-    final response = await http.post(Uri.parse(BaseUrl.getTracking), body: {
-      "id_lead": widget.model.id_lead,
+    final response =
+        await http.post(Uri.parse(BaseUrl.getTrackingWhere), body: {
+      "id": widget.model.id_lead,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
@@ -177,7 +149,6 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
     getSales(widget.model.id_sales);
     getMarkom(widget.model.id_markom);
     getFeeDetail(widget.model.id_lead);
-    getRumahDetail(widget.model.id_lead);
     getTracking();
   }
 
@@ -203,18 +174,8 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
       );
     }
 
-    Widget informationSales() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesSales,
-        name: nameSales,
-      );
-    }
-
-    Widget informationMarkom() {
-      return InformationUser(
-        imageUrl: BaseUrl.imageUrl + imagesMarkom,
-        name: nameMarkom,
-      );
+    Widget informationUser() {
+      return InformationUsers(nameSales: nameSales, nameMarkom: nameMarkom);
     }
 
     Widget informationLead() {
@@ -293,7 +254,7 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  noRumah,
+                  widget.model.no_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -309,7 +270,7 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
                   style: whiteTextStyle,
                 ),
                 Text(
-                  tipeRumah,
+                  widget.model.tipe_rumah!,
                   style: whiteTextStyle,
                 ),
               ],
@@ -419,28 +380,25 @@ class _MarkomDetailReservasiPageState extends State<MarkomDetailReservasiPage> {
       ),
       body: isLoading
           ? CustomLoading()
-          : SingleChildScrollView(
-              child: Container(
-                height: 800,
-                decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(radius20),
-                    topRight: Radius.circular(radius20),
-                  ),
+          : Container(
+              height: 800,
+              decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(radius20),
+                  topRight: Radius.circular(radius20),
                 ),
-                child: ListView(
-                  children: [
-                    informationSales(),
-                    informationMarkom(),
-                    informationLead(),
-                    informationKeterangan(),
-                    informationFeeReservasi(),
-                    informationRumah(),
-                    titleTracking(),
-                    isData ? tracking() : DataNotFound(),
-                  ],
-                ),
+              ),
+              child: ListView(
+                children: [
+                  informationUser(),
+                  informationLead(),
+                  informationKeterangan(),
+                  informationFeeReservasi(),
+                  informationRumah(),
+                  titleTracking(),
+                  isData ? tracking() : DataNotFound(),
+                ],
               ),
             ),
     );

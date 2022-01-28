@@ -24,7 +24,7 @@ class _MarkomAddRumahState extends State<MarkomAddRumah> {
       isLoading = true;
     });
 
-    final response = await http.post(Uri.parse(BaseUrl.tambahRumah), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addHome), body: {
       "no_rumah": noRumahController.text,
       "tipe_rumah": tipeRumahController.text,
     });

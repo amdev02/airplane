@@ -1,9 +1,11 @@
 class InsightHari {
   final String hari;
+  // ignore: non_constant_identifier_names
   final String jumlah_harian;
 
   InsightHari({
     required this.hari,
+    // ignore: non_constant_identifier_names
     required this.jumlah_harian,
   });
 
@@ -15,10 +17,12 @@ class InsightHari {
 
 class InsightMinggu {
   final String minggu;
+  // ignore: non_constant_identifier_names
   final String jumlah_mingguan;
 
   InsightMinggu({
     required this.minggu,
+    // ignore: non_constant_identifier_names
     required this.jumlah_mingguan,
   });
 
@@ -30,10 +34,12 @@ class InsightMinggu {
 
 class InsightBulan {
   final String bulan;
+  // ignore: non_constant_identifier_names
   final String jumlah_bulanan;
 
   InsightBulan({
     required this.bulan,
+    // ignore: non_constant_identifier_names
     required this.jumlah_bulanan,
   });
 
@@ -45,12 +51,16 @@ class InsightBulan {
 
 class InsightHarianUser {
   final String hari;
+  // ignore: non_constant_identifier_names
   final String nama_user;
+  // ignore: non_constant_identifier_names
   final String jumlah_harian;
 
   InsightHarianUser({
     required this.hari,
+    // ignore: non_constant_identifier_names
     required this.nama_user,
+    // ignore: non_constant_identifier_names
     required this.jumlah_harian,
   });
 
@@ -64,12 +74,16 @@ class InsightHarianUser {
 
 class InsightMingguanUser {
   final String minggu;
+  // ignore: non_constant_identifier_names
   final String nama_user;
+  // ignore: non_constant_identifier_names
   final String jumlah_mingguan;
 
   InsightMingguanUser({
     required this.minggu,
+    // ignore: non_constant_identifier_names
     required this.nama_user,
+    // ignore: non_constant_identifier_names
     required this.jumlah_mingguan,
   });
 
@@ -83,12 +97,16 @@ class InsightMingguanUser {
 
 class InsightBulananUser {
   final String bulan;
+  // ignore: non_constant_identifier_names
   final String nama_user;
+  // ignore: non_constant_identifier_names
   final String jumlah_bulanan;
 
   InsightBulananUser({
     required this.bulan,
+    // ignore: non_constant_identifier_names
     required this.nama_user,
+    // ignore: non_constant_identifier_names
     required this.jumlah_bulanan,
   });
 

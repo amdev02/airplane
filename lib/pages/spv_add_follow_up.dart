@@ -24,7 +24,7 @@ class _SpvAddFollowUpState extends State<SpvAddFollowUp> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tambahFollowUp), body: {
+    final response = await http.post(Uri.parse(BaseUrl.addFollowUp), body: {
       "id_lead": widget.model.id_lead,
       "tgl": widget.model.tgl_add,
       "keterangan": keteranganController.text,
@@ -91,7 +91,7 @@ class _SpvAddFollowUpState extends State<SpvAddFollowUp> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.notifFollowUp), body: {
       "id_sales": pref.getString("idUser"),
-      "id_markom": widget.model.id_markom,
+      "id": widget.model.id_markom,
     });
   }
 

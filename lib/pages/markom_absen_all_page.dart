@@ -26,7 +26,7 @@ class _MarkomAbsenAllPageState extends State<MarkomAbsenAllPage> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.tampilAbsensiAll));
+    final response = await http.post(Uri.parse(BaseUrl.getAbsen));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -73,7 +73,7 @@ class _MarkomAbsenAllPageState extends State<MarkomAbsenAllPage> {
                     final a = list[i];
                     return CardAbsen(
                       name: a.nama_user,
-                      status: a.status,
+                      status: a.status == "1" ? "Absen Pagi" : "Pamit",
                       date: a.date,
                       keterangan: a.keterangan,
                       imagesAbsen: a.imagesAbsen,

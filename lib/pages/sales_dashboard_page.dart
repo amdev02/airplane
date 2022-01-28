@@ -34,7 +34,7 @@ class _DashboardSalesState extends State<DashboardSales> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.getUser), body: {
-      "id_users": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -55,9 +55,7 @@ class _DashboardSalesState extends State<DashboardSales> {
       isLoading = true;
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(BaseUrl.antrian), body: {
-      "id_markom": pref.getString("idMarkom"),
-    });
+    final response = await http.post(Uri.parse(BaseUrl.getAntrianAll));
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
         setState(() {
@@ -94,14 +92,14 @@ class _DashboardSalesState extends State<DashboardSales> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(BaseUrl.countSales), body: {
-      "id_sales": pref.getString("idUser"),
+      "id": pref.getString("idUser"),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        jmlHarian = data['jmlHarian'];
-        mingguan = data['mingguan'];
-        bulanan = data['bulanan'];
+        jmlHarian = data['jumlah_harian'];
+        mingguan = data['jumlah_mingguan'];
+        bulanan = data['jumlah_bulanan'];
         isLoading = false;
       });
     } else {
@@ -114,6 +112,15 @@ class _DashboardSalesState extends State<DashboardSales> {
     });
   }
 
+  setToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final status = await OneSignal.shared.getDeviceState();
+    final response = await http.post(Uri.parse(BaseUrl.changeToken), body: {
+      "id": pref.getString("idUser"),
+      "token": status?.userId,
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -121,6 +128,7 @@ class _DashboardSalesState extends State<DashboardSales> {
     getName();
     getAntrian();
     getCount();
+    setToken();
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground

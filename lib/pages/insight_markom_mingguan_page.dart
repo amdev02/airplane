@@ -29,8 +29,8 @@ class _InsightMarkomMingguanState extends State<InsightMarkomMingguan> {
     });
     list.clear();
     final response =
-        await http.post(Uri.parse(BaseUrl.getInsightMingguanMarkom), body: {
-      "id_markom": widget.model.id_users,
+        await http.post(Uri.parse(BaseUrl.getInsightWeeklyByMarkom), body: {
+      "id": widget.model.id_users,
     });
     if (response.statusCode == 200) {
       if (response.contentLength == 2) {
